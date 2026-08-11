@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pi0fast-worldmodel-rl"
+version = "0.1.0"
+description = "A safe, testable single-arm VLA engineering pipeline built around LeRobot and PI0-FAST."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "Apache-2.0" }
+authors = [{ name = "pi0fast-worldmodel-rl contributors" }]
+dependencies = [
+  "numpy>=1.26,<3",
+  "Pillow>=10,<13",
+  "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<10",
+  "pytest-cov>=5,<8",
+  "ruff>=0.9,<1",
+]
+opencv = ["opencv-python>=4.9,<5"]
+models = ["huggingface-hub>=0.25,<2"]
+lerobot = ["lerobot[training,pi]>=0.6,<0.7"]
+
+[project.scripts]
+pi0fast-wm-rl = "pi0fast_wm_rl.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+

@@ -1,0 +1,11 @@
+deployment:
+  policy: mock
+  checkpoint: ""
+  device: cpu
+  dry_run: true
+
+control:
+  frequency_hz: 10
+  execute_steps: 5
+  timeout_seconds: 2.0
+

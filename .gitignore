@@ -1,0 +1,36 @@
+# Secrets and local environments
+.env
+.venv/
+.cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Large model artifacts
+models/pretrained/*
+!models/pretrained/.gitkeep
+models/finetuned/*
+!models/finetuned/.gitkeep
+models/normalization/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+
+# Data and generated outputs
+data/raw/*
+!data/raw/.gitkeep
+data/processed/
+data/splits/
+outputs/*
+!outputs/.gitkeep
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

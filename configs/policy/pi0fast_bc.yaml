@@ -1,0 +1,22 @@
+training:
+  backend: lerobot-train
+  dataset_root: data/processed/lerobot_pick_place
+  dataset_repo_id: local/pick_place
+  output_dir: outputs/checkpoints/pi0fast
+  job_name: pi0fast_pick_place
+  steps: 100000
+  batch_size: 1
+  device: cuda
+  seed: 42
+
+policy:
+  type: pi0_fast
+  pretrained_path: models/pretrained/pi0fast-base
+  model_id: lerobot/pi0fast-base
+  action_tokenizer_name: models/pretrained/fast-action-tokenizer
+  chunk_size: 10
+  n_action_steps: 5
+  max_action_tokens: 256
+  dtype: bfloat16
+  gradient_checkpointing: true
+

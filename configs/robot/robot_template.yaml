@@ -1,0 +1,10 @@
+robot:
+  type: replace_me
+  state_dim: 7
+  action_dim: 7
+  initial_state: [0, 0, 0, 0, 0, 0, 0]
+  joint_min: [-1, -1, -1, -1, -1, -1, 0]
+  joint_max: [1, 1, 1, 1, 1, 1, 1]
+  # Hardware-specific ports, calibration, joint names, and watchdog settings
+  # must be added by the real robot adapter. Never bypass SafetyFilter.
+

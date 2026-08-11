@@ -1,0 +1,9 @@
+robot:
+  type: mock
+  state_dim: 7
+  action_dim: 7
+  deterministic: true
+  initial_state: [0, 0, 0, 0, 0, 0, 0]
+  joint_min: [-1, -1, -1, -1, -1, -1, 0]
+  joint_max: [1, 1, 1, 1, 1, 1, 1]
+

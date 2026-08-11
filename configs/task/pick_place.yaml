@@ -1,0 +1,18 @@
+task:
+  name: pick_place
+  instruction: "put the red cube into the bowl"
+  max_episode_steps: 200
+
+control:
+  frequency_hz: 10
+  action_mode: delta_joint
+  action_dim: 7
+  state_dim: 7
+  chunk_size: 10
+  execute_steps: 5
+
+safety:
+  max_action_delta: 0.05
+  max_velocity: 0.5
+  timeout_seconds: 2.0
+

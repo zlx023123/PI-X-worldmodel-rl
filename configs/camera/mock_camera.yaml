@@ -1,0 +1,8 @@
+camera:
+  type: mock
+  name: front
+  width: 160
+  height: 120
+  fps: 10
+  seed: 42
+

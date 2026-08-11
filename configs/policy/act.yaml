@@ -1,0 +1,16 @@
+training:
+  backend: lerobot-train
+  dataset_root: data/processed/lerobot_pick_place
+  dataset_repo_id: local/pick_place
+  output_dir: outputs/checkpoints/act
+  job_name: act_pick_place
+  steps: 100000
+  batch_size: 8
+  device: cuda
+  seed: 42
+
+policy:
+  type: act
+  chunk_size: 100
+  n_action_steps: 100
+

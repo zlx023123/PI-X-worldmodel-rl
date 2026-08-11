@@ -1,0 +1,20 @@
+compatibility:
+  lerobot_min_version: "0.6.0"
+  lerobot_max_version_exclusive: "0.7.0"
+
+pi0fast:
+  provider: huggingface
+  model_id: lerobot/pi0fast-base
+  local_path: models/pretrained/pi0fast-base
+  revision: main
+  sha256: ""
+  required: true
+
+fast_tokenizer:
+  provider: huggingface
+  model_id: lerobot/fast-action-tokenizer
+  local_path: models/pretrained/fast-action-tokenizer
+  revision: main
+  sha256: ""
+  required: true
+
