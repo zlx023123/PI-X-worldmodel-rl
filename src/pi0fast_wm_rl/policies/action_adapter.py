@@ -65,6 +65,17 @@ class ActionAdapter:
     ) -> None:
         if model_dim <= 0 or robot_dim <= 0:
             raise ValueError("model_dim and robot_dim must be positive")
+        valid_action_modes = {"delta_joint", "absolute_joint"}
+        if model_action_mode not in valid_action_modes:
+            raise ValueError(
+                f"model_action_mode must be 'delta_joint' or 'absolute_joint', "
+                f"got {model_action_mode!r}"
+            )
+        if robot_action_mode not in valid_action_modes:
+            raise ValueError(
+                f"robot_action_mode must be 'delta_joint' or 'absolute_joint', "
+                f"got {robot_action_mode!r}"
+            )
         self.model_dim = model_dim
         self.robot_dim = robot_dim
         mapping = list(robot_from_model) if robot_from_model is not None else list(range(robot_dim))
