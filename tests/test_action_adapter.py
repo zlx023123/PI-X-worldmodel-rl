@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from pi0fast_wm_rl.policies.action_adapter import ActionAdapter, GripperMapping, NormalizationSpec
 
@@ -25,3 +26,17 @@ def test_action_adapter_denormalizes_maps_gripper_and_converts_mode() -> None:
         np.array([0.25, -0.25, 0.0]), np.array([0.1, -0.1, 0.25])
     )
     np.testing.assert_allclose(result, [0.4, -0.4, 0.25])
+
+
+@pytest.mark.parametrize(
+    ("field", "kwargs"),
+    [
+        ("model_action_mode", {"model_action_mode": "typo"}),
+        ("robot_action_mode", {"robot_action_mode": "typo"}),
+    ],
+)
+def test_action_adapter_rejects_invalid_action_modes(
+    field: str, kwargs: dict[str, str]
+) -> None:
+    with pytest.raises(ValueError, match=field):
+        ActionAdapter(model_dim=3, robot_dim=3, **kwargs)
