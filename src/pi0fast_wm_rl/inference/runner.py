@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass
 import numpy as np
 
 from pi0fast_wm_rl.cameras.manager import CameraManager
+from pi0fast_wm_rl.policies.action_adapter import ActionAdapter
 from pi0fast_wm_rl.policies.base import BasePolicy
 from pi0fast_wm_rl.robots.base import BaseRobot
 from pi0fast_wm_rl.robots.safety import SafetyFilter, SafetyViolation
@@ -43,9 +44,23 @@ class RolloutRunner:
         control_hz: float,
         execute_steps: int,
         max_episode_steps: int,
+        action_adapter: ActionAdapter | None = None,
     ) -> None:
         if execute_steps <= 0 or max_episode_steps <= 0:
             raise ValueError("execute_steps and max_episode_steps must be positive")
+        metadata = robot.metadata()
+        if metadata.get("action_mode", safety_filter.action_mode) != safety_filter.action_mode:
+            raise ValueError("Robot and SafetyFilter action modes must match")
+        if action_adapter is not None:
+            if action_adapter.robot_action_mode != safety_filter.action_mode:
+                raise ValueError("ActionAdapter and SafetyFilter action modes must match")
+            if (
+                action_adapter.robot_dim != metadata.get("action_dim")
+                or action_adapter.robot_dim != metadata.get("state_dim")
+                or safety_filter.joint_min.shape != (action_adapter.robot_dim,)
+            ):
+                raise ValueError("ActionAdapter, robot and SafetyFilter dimensions must match")
+        self.action_adapter = action_adapter
         self.robot = robot
         self.cameras = cameras
         self.policy = policy
@@ -68,9 +83,15 @@ class RolloutRunner:
         try:
             while steps < self.max_episode_steps:
                 observation = self.builder.build()
+                robot_state = observation.state.copy()
+                if self.action_adapter is not None:
+                    observation.state = self.action_adapter.robot_state_to_model(robot_state)
                 started = time.perf_counter()
                 chunk = np.asarray(self.policy.predict_action_chunk(observation), dtype=np.float64)
                 inference_latency.append((time.perf_counter() - started) * 1000.0)
+                if self.action_adapter is not None:
+                    # Reuse the adapter's observation-relative chunk semantics.
+                    chunk = self.action_adapter.model_chunk_to_robot(chunk, robot_state)
                 limit = min(self.execute_steps, self.max_episode_steps - steps)
                 metrics = self.executor.execute(chunk, n_action_steps=limit, dry_run=dry_run)
                 steps += metrics.executed_steps
